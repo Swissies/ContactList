@@ -74,6 +74,24 @@ public class ContactControllerTest {
         Assert.assertEquals("true", result.getResponse().getContentAsString());
 
         assertEquals(3, contactService.getContacts(userRepo.findByUsername("Joni")).size());
+
+        emails = new HashSet<>();
+        emails.add("newEmail@gmail.com");
+        numbers = new HashSet<>();
+        numbers.add("380863573645");
+
+        contact = new ContactDto("Jhone", emails, numbers);
+
+        result = this.mockMvc.perform(put("/contacts")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(jsonParser.parse(contact)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        Assert.assertEquals("false", result.getResponse().getContentAsString());
+
+        assertEquals(3, contactService.getContacts(userRepo.findByUsername("Joni")).size());
     }
 
     @Test
@@ -108,6 +126,25 @@ public class ContactControllerTest {
         Assert.assertEquals("true", result.getResponse().getContentAsString());
 
         assertEquals("Jhohub", contactRepo.findContactById((long) 1).getName());
+
+        emails = new HashSet<>();
+        emails.add("itEmail@gmail.com");
+        numbers = new HashSet<>();
+        numbers.add("380846284637");
+
+        contact = new ContactDto("Jhohub", emails, numbers);
+
+        result = this.mockMvc.perform(post("/contacts")
+                .param("id", "3")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(jsonParser.parse(contact)))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        Assert.assertEquals("false", result.getResponse().getContentAsString());
+
+        assertNotEquals("Jhohab", contactRepo.findContactById((long) 3).getName());
     }
 
     @Test

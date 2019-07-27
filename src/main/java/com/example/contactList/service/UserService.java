@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 
@@ -32,7 +33,11 @@ public class UserService implements UserDetailsService {
 
     public boolean addUser(User user) {
 
-        User userFromDb = userRepo.findByUsername(user.getUsername());
+        User userFromDb;
+
+        if(user.getUsername() != null && !StringUtils.isEmpty(user.getUsername()) && user.getPassword() != null && !StringUtils.isEmpty(user.getPassword()))
+            userFromDb = userRepo.findByUsername(user.getUsername());
+        else return false;
 
         if (userFromDb != null) {
             return false;

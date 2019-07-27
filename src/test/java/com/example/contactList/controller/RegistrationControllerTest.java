@@ -51,5 +51,17 @@ public class RegistrationControllerTest {
         Assert.assertEquals("true", result.getResponse().getContentAsString());
 
         Assert.assertTrue(userRepo.existsById((long) 3));
+
+        user = new User("Nikolai", "");
+
+        result = this.mockMvc.perform(post("/registration")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(jsonParser.parse(user)))
+                .andExpect(status().isOk()).andDo(print())
+                .andReturn();
+
+        Assert.assertEquals("false", result.getResponse().getContentAsString());
+
+        Assert.assertFalse(userRepo.existsById((long) 4));
     }
 }
