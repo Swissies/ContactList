@@ -32,7 +32,7 @@ public class UserServiceTest {
 
     @Test
     public void addUser() {
-        User user = new User();
+        User user = new User("Nikola","123");
 
 
         boolean isUserCreated = userService.addUser(user);

@@ -45,6 +45,12 @@ public class ContactServiceTest {
         Set<ContactDto> result = contactService.getContacts(user);
 
         Assert.assertEquals(2, result.size());
+
+        user = new User();
+
+        result = contactService.getContacts(user);
+
+        Assert.assertEquals(0, result.size());
     }
 
     @Test
@@ -60,6 +66,9 @@ public class ContactServiceTest {
         Assert.assertTrue(contactService.addContact(user, contact));
 
         Assert.assertEquals("Jho", contactRepo.findContactById((long) 7).getName());
+
+        contact.setName("Jhone");
+        Assert.assertFalse(contactService.addContact(user, contact));
     }
 
     @Test
@@ -75,6 +84,8 @@ public class ContactServiceTest {
         Assert.assertTrue(contactService.saveContact(user, contactRepo.findContactById((long) 1), contact));
 
         Assert.assertEquals("Jho", contactRepo.findContactById((long) 1).getName());
+
+        Assert.assertFalse(contactService.saveContact(user, contactRepo.findContactById((long) 3), contact));
     }
 
     @Test
@@ -84,6 +95,10 @@ public class ContactServiceTest {
         Assert.assertTrue(contactService.deleteContact(user, contactRepo.findContactById((long) 1)));
 
         Assert.assertNull(contactRepo.findContactById((long) 1));
+
+        Assert.assertFalse(contactService.deleteContact(user, contactRepo.findContactById((long) 3)));
+
+        Assert.assertNotNull(contactRepo.findContactById((long) 3));
     }
 
     @Test
